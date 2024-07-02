@@ -153,9 +153,9 @@ acc = {}
 temp_data = mat73.loadmat(Dir + '/epopy_vft.mat') #10(fold) List, Preprocessing and Segmentation within 10 Fold was performed with Matlab  
 all_numID = temp_data['epopy']['NumID'] #ID of subjects in each fold 
 all_trainX = temp_data['epopy']['trainX'] #Size: (The number of Samples, The number of channel * 2 (HbO and HbR), The number of Subjects)
-all_trainY = temp_data['epopy']['trainY'] #Size: (The number of Samples, The number of channel * 2 (HbO and HbR), The number of Subjects)
+all_trainY = temp_data['epopy']['trainY'] 
 all_testX = temp_data['epopy']['testX'] #Size: (The number of Samples, The number of channel * 2 (HbO and HbR), The number of Subjects)
-all_testY = temp_data['epopy']['testY'] #Size: (The number of Samples, The number of channel * 2 (HbO and HbR), The number of Subjects)
+all_testY = temp_data['epopy']['testY'] 
 
 #Variable declaration  
 nFold=10 #The number of folds
