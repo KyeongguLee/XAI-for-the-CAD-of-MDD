@@ -1,13 +1,14 @@
 
 """
 Created on March 17 20:26:42 2023
+Tensorflow & Keras version: 2.7.0
 @author: kg
 """
 import os
 import keras
 from tensorflow.python.ops import gen_nn_ops
 
-import tensorflow as tf
+import tensorflow as tf 
 from tensorflow.keras import optimizers
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input
@@ -175,7 +176,7 @@ r_final = np.zeros([nFold,nSubinTestFold,nCh,nSamples,2]) #Last term: the number
 sensitivity = np.zeros(10)
 specificity = np.zeros(10)
 
-seed = 0
+seed = 0;
 os.environ['PYTHONHASHSEED'] = str(seed)
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 np.random.seed(seed)
