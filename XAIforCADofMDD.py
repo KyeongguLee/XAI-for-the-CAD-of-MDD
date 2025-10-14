@@ -172,6 +172,8 @@ test_loss = np.zeros((nFold,nEpoch))
 train_acc = np.zeros((nFold,nEpoch))
 train_loss = np.zeros((nFold,nEpoch))
 accuracy = np.zeros((nFold))
+pred_classF=np.zeros([10,12,2])
+pred_class_real = np.zeros([10,12,2])
 r_final = np.zeros([nFold,nSubinTestFold,nCh,nSamples,2]) #Last term: the number of hemodynamic responses (HbO and HbR) 
 sensitivity = np.zeros(10)
 specificity = np.zeros(10)
@@ -235,6 +237,10 @@ for k in range(nFold):
     result_class = np.sum(pred_class*test_y, axis=1)
     hc = np.sum(test_y, axis=0)[0].astype(int)
     mdd = np.sum(test_y, axis=0)[1].astype(int)
+    pred_classF[k,:(hc+mdd),:]=pred_class
+    pred_class_real[k,:(hc+mdd),:]=pred
+    hc = np.sum(test_y, axis=0)[0].astype(int)
+    mdd = np.sum(test_y, axis=0)[1].astype(int)
     
     sensitivity[k] = np.sum(result_class[hc:])/mdd
     specificity[k] = np.sum(result_class[:hc])/hc
@@ -272,6 +278,8 @@ for k in range(nFold):
     acc['relevance'] = r_final
     acc['sen'] = sensitivity
     acc['spe'] = specificity
+    acc['pred_classF'] = pred_classF
+    acc['pred_class_real'] = pred_class_real
 
 # Save result
 sio.savemat(Dir + '/' + savename, acc)   
