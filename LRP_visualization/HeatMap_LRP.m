@@ -34,12 +34,12 @@ linear_grid_y=linspace(-3*1.5,3*1.5,300);
 method=1; %1: proposed XAI/2: XAI-HBO/3: XAI-HBR
 
 if method==1
-    load('Results_CAD_vft.mat')
+    load('Results_CAD_.mat')
     relevance=squeeze(mean(relevance,5))*2;
 elseif method==2
-    load('BestResultsOxy_CAD_vft.mat')
+    load('ResultsOxy_CAD.mat')
 elseif method==3
-    load('BestResultsDeoxy_CAD_vft.mat')
+    load('ResultsDeoxy_CAD.mat')
 end
 
 real_data = zeros(4,48,246,10);
