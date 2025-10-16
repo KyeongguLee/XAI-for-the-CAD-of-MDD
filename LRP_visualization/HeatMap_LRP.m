@@ -148,8 +148,6 @@ set(gcf,'units','normalized','outerposition',[0 0 1 1]);
 set(gca, 'LooseInset', get(gca, 'TightInset'));
 
 colorbar
-relevance_stat=squeeze(mean(real_data(1:2,:)))';
-save('LRP.mat','real_data','relevance_stat');
 
 %% plot individuals
 
