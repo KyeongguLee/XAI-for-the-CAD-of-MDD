@@ -34,7 +34,7 @@ linear_grid_y=linspace(-3*1.5,3*1.5,300);
 method=1; %1: proposed XAI/2: XAI-HBO/3: XAI-HBR 
 
 if method==1
-    load('Results_CAD_.mat')
+    load('BestResults_CAD_vft.mat')
     relevance=squeeze(mean(relevance,5))*2;
 elseif method==2
     load('ResultsOxy_CAD.mat')
@@ -71,6 +71,16 @@ for fold = 1:10
     correct_mdd = squeeze(mean(relevance(fold, acc_mdd_correct,:,:),2));
     wrong_hc = squeeze(mean(relevance(fold, acc_hc_wrong,:,:),2));
     wrong_mdd = squeeze(mean(relevance(fold, acc_mdd_wrong,:,:),2));
+    
+%     relevance_TN = squeeze(relevance(fold, acc_hc_correct,:,:));
+%     relevance_TP = squeeze(relevance(fold, acc_mdd_correct,:,:));
+%     
+%     if ndims(relevance_TN)==2
+%         relevance_TN=reshape(relevance_TN,[1,size(relevance_TN,1),size(relevance_TN,2)]);
+%     end
+%     if ndims(relevance_TP)==2
+%         relevance_TP=reshape(relevance_TP,[1,size(relevance_TP,1),size(relevance_TP,2)]);
+%     end
 
     ymax_weight = max(relevance,[],'all')*0.0005;
     ymin_weight = min(relevance,[],'all')*0.0005;
@@ -83,6 +93,9 @@ for fold = 1:10
         wrong_hc(mean_channel(m,1),:) = (wrong_hc(mean_channel(m,1),:)+wrong_hc(mean_channel(m,2),:))/2;
         wrong_mdd(mean_channel(m,1),:) = (wrong_mdd(mean_channel(m,1),:)+wrong_mdd(mean_channel(m,2),:))/2;
         
+%         relevance_TN(:,mean_channel(m,1),:) = (relevance_TN(:,mean_channel(m,1),:)+relevance_TN(:,mean_channel(m,2),:))/2; 
+%         relevance_TP(:,mean_channel(m,1),:) = (relevance_TP(:,mean_channel(m,1),:)+relevance_TP(:,mean_channel(m,2),:))/2;
+        
     end
 
     correct_hc(mean_channel(:,2),:)=[];
@@ -90,6 +103,8 @@ for fold = 1:10
     wrong_hc(mean_channel(:,2),:)=[];
     wrong_mdd(mean_channel(:,2),:)=[];
     idx_real(mean_channel(:,2))=[];
+%     relevance_TN(:,mean_channel(:,2),:)=[];
+%     relevance_TP(:,mean_channel(:,2),:)=[];
     
     RSTN=zeros(size(acc_hc_correct,2),48,246);
     RSTP=zeros(size(acc_mdd_correct,2),48,246);
@@ -99,12 +114,27 @@ for fold = 1:10
         real_data(2,j,:,fold) = correct_mdd(I,:);
         real_data(3,j,:,fold) = wrong_hc(I,:);
         real_data(4,j,:,fold) = wrong_mdd(I,:);
+%         RSTN(:,j,:)=relevance_TN(:,I,:);
+%         RSTP(:,j,:)=relevance_TP(:,I,:);
     end
-
+%     RS_TN{fold}=RSTN;
+%     RS_TP{fold}=RSTP;
 end
 
 rnan = isnan(real_data);
 real_data = squeeze(mean(mean(real_data,4,'omitnan'),3,'omitnan'));
+% %% TOP 6 relevance scores for TP and TN 
+% [LRPsort,ind]=sort(real_data,2,'descend');
+% idx_TN=idx(ind(1,:));
+% idx_TP=idx(ind(2,:));
+% relevanceTN=squeeze(mean(cat(1,RS_TN{1:10}),3));
+% relevanceTP=squeeze(mean(cat(1,RS_TP{1:10}),3));
+% relevanceTN=relevanceTN(:,ind(1,1:6));
+% relevanceTP=relevanceTP(:,ind(2,1:6));
+% meanR_TN=[mean(relevanceTN);idx_TN(1:6)];
+% stdR_TN=[std(relevanceTN);idx_TN(1:6)];
+% meanR_TP=[mean(relevanceTP);idx_TP(1:6)];
+% stdR_TP=[std(relevanceTP);idx_TP(1:6)];
 
 
 %% plot_averaged
@@ -138,7 +168,7 @@ pcolor(interp_x, interp_y ,interp_z );
 colormap('hot')
 
 axis([min(ch_x) max(ch_x) min(ch_y) max(ch_y)]);
-caxis([0 0.3*max(real_data,[],'all')])
+% caxis([0 0.3*max(real_data,[],'all')])
 shading interp
 axis off
 set(gca,'xtick',[])
